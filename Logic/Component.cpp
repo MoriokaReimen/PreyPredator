@@ -1,8 +1,8 @@
 #include "Component.hpp"
 
 namespace Logic {
-Component::Component() :
-    pos_{0.0, 0.0}, rotation_(0.0)
+Component::Component(COMPONENT_TYPE type) :
+    pos_{0.0, 0.0}, rotation_(0.0), status_{1000}, type_(type)
 {
 
 }
@@ -26,5 +26,19 @@ double Component::getRotation()
     return this->rotation_;
 }
 
+COMPONENT_TYPE Component::getType()
+{
+    return type_;
+}
 
+Status Component::getStatus() const
+{
+    return status_;
+
+}
+
+void Component::setStatus(const Status& status)
+{
+    this->status_ = status;
+}
 };

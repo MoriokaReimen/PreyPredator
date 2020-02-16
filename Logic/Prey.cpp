@@ -6,7 +6,7 @@ namespace Logic {
 boost::mt19937 Prey::gen_;
 
 Prey::Prey(System* system) :
-    system_(system)
+    Component(PREY), system_(system)
 {
 
 }
@@ -21,6 +21,7 @@ void Prey::step()
     this->setRotation(rotation);
     pos +=  Eigen::Rotation2D(this->getRotation()) * Eigen::Vector2d::UnitY();
     system_->updatePos(*this, pos);
+    this->status_.energy -= 1;
 
 }
 

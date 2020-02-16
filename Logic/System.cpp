@@ -1,4 +1,5 @@
 #include "System.hpp"
+#include <algorithm>
 
 namespace Logic
 {
@@ -63,5 +64,14 @@ void System::step()
     {
         component->step();
     }
+    this->reap();
 }
+
+void System::reap()
+{
+    components_.erase(std::remove_if(components_.begin(), components_.end(),
+                      [](const std::shared_ptr<Component>& x) {return x->getStatus().energy <= 0;})
+                     , components_.end());
+}
+
 };
