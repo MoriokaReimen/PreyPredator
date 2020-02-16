@@ -16,6 +16,7 @@ public:
     void addComponent(std::shared_ptr<Component> component);
     void updatePos(Component& component, const Eigen::Vector2d& position);
     void eachComponent(const std::function<void (const std::shared_ptr<Component> )>& func);
+    void step();
 };
 
 };

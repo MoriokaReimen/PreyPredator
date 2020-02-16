@@ -15,7 +15,7 @@ void setPosition(const Eigen::Vector2d& pos);
 void setRotation(const double& rotation);
 Eigen::Vector2d getPosition();
 double getRotation();
-
+virtual void step() = 0;
 virtual ~Component() {}; 
 };
 

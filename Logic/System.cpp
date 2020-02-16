@@ -56,4 +56,12 @@ void System::eachComponent(const std::function<void (const std::shared_ptr<Compo
         func(component);
     }
 }
+
+void System::step()
+{
+    for(auto component : components_)
+    {
+        component->step();
+    }
+}
 };

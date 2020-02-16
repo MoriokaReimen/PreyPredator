@@ -25,9 +25,9 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        std::function<void (const std::shared_ptr<Logic::Component> )> func = std::bind(mydraw, std::ref(window), std::placeholders::_1);
+        std::function<void (const std::shared_ptr<Logic::Component> )> func = std::bind(draw, std::ref(window), std::placeholders::_1);
         system.eachComponent(func);
-        prey->step();
+        system.step();
         window.display();
         sf::sleep(sf::milliseconds(5));
     }
