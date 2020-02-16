@@ -44,13 +44,13 @@ void draw(sf::RenderWindow& window, std::shared_ptr<Logic::Component> component)
 {
     auto pos = component->getPosition();
     ArcShape sight(60, 60);
-    sf::CircleShape body(20);
+    sf::CircleShape body(10);
 
     sight.setPosition(pos.x(), pos.y());
     sight.setRotation(component->getRotation());
     sight.setFillColor(sf::Color(255, 255, 0, 100));
 
-    body.setPosition(pos.x() - 20.0, pos.y() - 20.0);
+    body.setPosition(pos.x() - 10.0, pos.y() - 10.0);
 
     window.draw(sight);
     window.draw(body);
