@@ -16,7 +16,7 @@ void setRotation(const double& rotation);
 Eigen::Vector2d getPosition();
 double getRotation();
 
-virtual ~Component() = 0; 
+virtual ~Component() {}; 
 };
 
 

@@ -15,7 +15,7 @@ public:
     System();
     void addComponent(std::shared_ptr<Component> component);
     void updatePos(Component& component, const Eigen::Vector2d& position);
-    void eachComponent(std::function<void (const std::shared_ptr<Component>& )> func);
+    void eachComponent(const std::function<void (const std::shared_ptr<Component> )>& func);
 };
 
 };

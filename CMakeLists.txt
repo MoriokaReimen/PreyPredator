@@ -20,6 +20,20 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 ")
 
+# Find SFML
+# Note: SFML_STATIC_LIBRARIES determines which libraries are found by find_package()
+find_package(SFML 2.4.2 COMPONENTS audio graphics window system network)
+
+# If found, include and link; otherwise output error message
+if(SFML_FOUND)
+    include_directories(${SFML_INCLUDE_DIR})
+else()
+	set(SFML_ROOT "" CACHE PATH "SFML top-level directory")
+	message("\n-> SFML directory not found. Set SFML_ROOT to SFML's top-level path (containing \"include\" and \"lib\" directories).")
+	message("-> Make sure the SFML libraries with the same configuration (Release/Debug, Static/Dynamic) exist.\n")
+endif()
+
+
 ##################################
 # install GoogleTest
 include(ExternalProject)
@@ -82,12 +96,18 @@ include_directories("${source_dir}/googletest/include"
 
 ##################################
 # set project include
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Logic ${source_dir}/include)
+include_directories(AFTER ${CMAKE_CURRENT_SOURCE_DIR}/Logic ${source_dir}/include )
 
 ##################################
 # Logic
 file(GLOB_RECURSE LOGIC_SRC Logic/*.cpp)
 add_library(Logic ${LOGIC_SRC})
+
+##################################
+# Main
+file(GLOB_RECURSE MAIN_SRC main/*.cpp)
+add_executable(Life ${MAIN_SRC})
+target_link_libraries(Life Logic  sfml-graphics sfml-window sfml-system)
 
 ##################################
 # Define a test

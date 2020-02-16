@@ -4,7 +4,7 @@
 
 namespace Logic
 {
-class Prey : Component
+class Prey : public Component
 {
     System* system_;
 public:

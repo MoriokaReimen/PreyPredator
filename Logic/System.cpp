@@ -49,7 +49,7 @@ void System::updatePos(Component& component, const Eigen::Vector2d& position)
     }
 }
 
-void System::eachComponent(std::function<void (const std::shared_ptr<Component>& )> func)
+void System::eachComponent(const std::function<void (const std::shared_ptr<Component> )>& func)
 {
     for(auto component : components_)
     {
