@@ -4,14 +4,19 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <functional>
+#include "ArcShape.hpp"
+
 void draw(sf::RenderWindow& window, std::shared_ptr<Logic::Component> component);
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode(800, 600)), "Life");
     Logic::System system;
-    auto prey = std::make_shared<Logic::Prey>(&system);
-    system.addComponent(prey);
+    for(int i = 0; i < 20; i++)
+    {
+        auto prey = std::make_shared<Logic::Prey>(&system);
+        system.addComponent(prey);
+    }
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -38,7 +43,15 @@ int main()
 void draw(sf::RenderWindow& window, std::shared_ptr<Logic::Component> component)
 {
     auto pos = component->getPosition();
-    sf::CircleShape shape(10);
-    shape.setPosition(pos.x(), pos.y());
-    window.draw(shape);
+    ArcShape sight(60, 60);
+    sf::CircleShape body(20);
+
+    sight.setPosition(pos.x(), pos.y());
+    sight.setRotation(component->getRotation());
+    sight.setFillColor(sf::Color(255, 255, 0, 100));
+
+    body.setPosition(pos.x() - 20.0, pos.y() - 20.0);
+
+    window.draw(sight);
+    window.draw(body);
 }

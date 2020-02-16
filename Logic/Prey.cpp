@@ -1,7 +1,10 @@
 #include "Prey.hpp"
 #include <cstdlib>
+#include <boost/random/uniform_int_distribution.hpp>
 
 namespace Logic {
+boost::mt19937 Prey::gen_;
+
 Prey::Prey(System* system) :
     system_(system)
 {
@@ -10,11 +13,13 @@ Prey::Prey(System* system) :
 
 void Prey::step()
 {
+    boost::random::uniform_int_distribution<> dist(-1, 1);
+
     auto pos = this->getPosition();
-    double r_x = static_cast<double>(std::rand()) / RAND_MAX;
-    double r_y = static_cast<double>(std::rand()) / RAND_MAX;
-    pos += (2 * r_x  - 1) * Eigen::Vector2d::UnitX();
-    pos += (2 * r_y  - 1) * Eigen::Vector2d::UnitY();
+    auto rotation = this->getRotation();
+    rotation += dist(gen_);
+    this->setRotation(rotation);
+    pos +=  Eigen::Rotation2D(this->getRotation()) * Eigen::Vector2d::UnitY();
     system_->updatePos(*this, pos);
 
 }
