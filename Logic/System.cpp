@@ -13,14 +13,14 @@ void System::addComponent(std::shared_ptr<Component> component)
     this->components_.push_back(component);
 }
 
-void System::updatePos(std::shared_ptr<Component> component, const Eigen::Vector2d& position)
+void System::updatePos(Component& component, const Eigen::Vector2d& position)
 {
     bool collide = false;
-    Eigen::Vector2d this_pos = component->getPosition();
+    Eigen::Vector2d this_pos = component.getPosition();
 
     for(auto other : this->components_)
     {
-        if(component != other)
+        if(&component != other.get())
         {
 
             auto other_pos = other->getPosition();
@@ -45,7 +45,7 @@ void System::updatePos(std::shared_ptr<Component> component, const Eigen::Vector
 
     if(!collide)
     {
-        component->setPosition(position);
+        component.setPosition(position);
     }
 }
 

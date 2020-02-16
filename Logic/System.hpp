@@ -14,7 +14,7 @@ class System
 public:
     System();
     void addComponent(std::shared_ptr<Component> component);
-    void updatePos(std::shared_ptr<Component> component, const Eigen::Vector2d& position);
+    void updatePos(Component& component, const Eigen::Vector2d& position);
 };
 
 };
