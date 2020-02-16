@@ -17,7 +17,7 @@ void Prey::step()
 
     auto pos = this->getPosition();
     auto rotation = this->getRotation();
-    rotation += dist(gen_);
+    rotation += 10.0 * dist(gen_);
     this->setRotation(rotation);
     pos +=  Eigen::Rotation2D(this->getRotation()) * Eigen::Vector2d::UnitY();
     system_->updatePos(*this, pos);

@@ -2,7 +2,7 @@
 
 namespace Logic {
 Component::Component(COMPONENT_TYPE type) :
-    pos_{0.0, 0.0}, rotation_(0.0), status_{1000}, type_(type)
+    pos_{0.0, 0.0}, rotation_(0.0), status_{10000}, type_(type)
 {
 
 }

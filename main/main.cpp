@@ -5,16 +5,22 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include "ArcShape.hpp"
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random/mersenne_twister.hpp>
 
 void draw(sf::RenderWindow& window, std::shared_ptr<Logic::Component> component);
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(sf::VideoMode(800, 600)), "Life");
+    boost::mt19937 gen;
+    boost::random::uniform_int_distribution<> dist_x(0, 1000);
+    boost::random::uniform_int_distribution<> dist_y(0, 500);
+    sf::RenderWindow window(sf::VideoMode(sf::VideoMode(1000, 500)), "Life");
     Logic::System system;
     for(int i = 0; i < 20; i++)
     {
         auto prey = std::make_shared<Logic::Prey>(&system);
+        prey->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
         system.addComponent(prey);
     }
 
