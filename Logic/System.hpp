@@ -11,6 +11,8 @@ class System
     const double WIDTH;
     const double HEIGHT;
     std::vector<std::shared_ptr<Component>> components_;
+    std::vector<std::shared_ptr<Component>> buffer_;
+    void fetchComponent();
 public:
     System();
     void addComponent(std::shared_ptr<Component> component);

@@ -24,6 +24,10 @@ int main()
         system.addComponent(prey);
     }
 
+    auto food = std::make_shared<Logic::Food>(&system);
+    food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
+    system.addComponent(food);
+
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -48,16 +52,30 @@ int main()
 
 void draw(sf::RenderWindow& window, std::shared_ptr<Logic::Component> component)
 {
-    auto pos = component->getPosition();
-    ArcShape sight(60, 60);
-    sf::CircleShape body(10);
+    switch(component->getType())
+    {
+        case Logic::PREY : {
+            auto prey_pos = component->getPosition();
+            ArcShape sight(60, 60);
+            sf::CircleShape prey_body(10);
 
-    sight.setPosition(pos.x(), pos.y());
-    sight.setRotation(component->getRotation());
-    sight.setFillColor(sf::Color(255, 255, 0, 100));
+            sight.setPosition(prey_pos.x(), prey_pos.y());
+            sight.setRotation(component->getRotation());
+            sight.setFillColor(sf::Color(255, 255, 0, 100));
 
-    body.setPosition(pos.x() - 10.0, pos.y() - 10.0);
+            prey_body.setPosition(prey_pos.x() - 10.0, prey_pos.y() - 10.0);
 
-    window.draw(sight);
-    window.draw(body);
+            window.draw(sight);
+            window.draw(prey_body);
+            break;
+        }
+        case Logic::FOOD : {
+            auto food_pos = component->getPosition();
+            sf::CircleShape food_body(10);
+            food_body.setPosition(food_pos.x() - 10.0, food_pos.y() - 10.0);
+            food_body.setFillColor(sf::Color(0, 255, 0));
+            window.draw(food_body);
+            break;
+        }
+    }
 }
