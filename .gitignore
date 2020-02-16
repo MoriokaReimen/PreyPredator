@@ -1,0 +1,12 @@
+
+*.o
+*.out
+*.md5~
+*.unc-backup~
+
+Makefile
+*.cmake
+CMakeFiles/*
+gtest/*
+CMakeCache.txt
+build/*
