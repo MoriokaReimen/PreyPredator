@@ -18,6 +18,9 @@ void System::updatePos(Component& component, const Eigen::Vector2d& position)
 {
     bool collide = false;
     fetchComponent();
+    Status status = component.getStatus();
+    status.collide = COLLIDE::NO_COLLIDE;
+
     for(auto other : this->components_)
     {
         if(&component != other.get())
@@ -29,6 +32,7 @@ void System::updatePos(Component& component, const Eigen::Vector2d& position)
             if(dist < 10)
             {
                 collide = true;
+                status.collide = COLLIDE::COMPONENT;
             }
         }
     }
@@ -46,7 +50,11 @@ void System::updatePos(Component& component, const Eigen::Vector2d& position)
     if(!collide)
     {
         component.setPosition(position);
+    } else {
+        status.collide = COLLIDE::WALL;
     }
+
+    component.setStatus(status);
 }
 
 void System::eachComponent(const std::function<void (const std::shared_ptr<Component> )>& func)

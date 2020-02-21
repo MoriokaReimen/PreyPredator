@@ -4,11 +4,19 @@
 namespace Logic
 {
 
+enum COLLIDE
+{
+    NO_COLLIDE,
+    COMPONENT,
+    WALL
+};
+
 struct Status
 {
     double sight_angle;
     double sight_distance;
     int energy;
+    COLLIDE collide;
 };
 
 enum COMPONENT_TYPE

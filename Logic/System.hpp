@@ -6,6 +6,7 @@
 
 namespace Logic
 {
+
 class System
 {
     const double WIDTH;

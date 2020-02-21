@@ -33,6 +33,13 @@ void Prey::step()
         double angle_diff =  normalized - this->getRotation();
         rotation += angle_diff > 0 ? -0.1 : 0.1;
     }
+
+    /* 壁にぶつかったら反転する */
+    if(this->status_.collide == WALL)
+    {
+        rotation += 180;
+    }
+
     this->setRotation(rotation);
     pos +=  Eigen::Rotation2D(this->getRotation() / 180.0 * M_PI) * Eigen::Vector2d::UnitY();
     system_->updatePos(*this, pos);
