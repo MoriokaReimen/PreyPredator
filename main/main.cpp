@@ -17,17 +17,19 @@ int main()
     boost::random::uniform_int_distribution<> dist_y(0, 500);
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode(1000, 500)), "Life");
     Logic::System system;
-    for(int i = 0; i < 20; i++)
+    for(int i = 0; i < 10; i++)
     {
         auto prey = std::make_shared<Logic::Prey>(&system);
         prey->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
         system.addComponent(prey);
     }
 
-    auto food = std::make_shared<Logic::Food>(&system);
-    food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
-    system.addComponent(food);
-
+    for(int i = 0; i < 2; i++)
+    {
+        auto food = std::make_shared<Logic::Food>(&system);
+        food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
+        system.addComponent(food);
+    }
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -55,12 +57,21 @@ void draw(sf::RenderWindow& window, std::shared_ptr<Logic::Component> component)
     switch(component->getType())
     {
         case Logic::PREY : {
+            auto target = component->getTarget();
+            if(target)
+            {
+                sf::CircleShape marker(12);
+                marker.setFillColor(sf::Color(255, 0, 0));
+                marker.setPosition(target->x() - 6.0, target->y() - 6.0);
+                window.draw(marker);
+            }
             auto prey_pos = component->getPosition();
-            ArcShape sight(60, 60);
+            auto status = component->getStatus();
+            ArcShape sight(status.sight_angle, status.sight_distance);
             sf::CircleShape prey_body(10);
 
             sight.setPosition(prey_pos.x(), prey_pos.y());
-            sight.setRotation(component->getRotation());
+            sight.setRotation(component->getRotation() + 90.0 - status.sight_angle / 2.0);
             sight.setFillColor(sf::Color(255, 255, 0, 100));
 
             prey_body.setPosition(prey_pos.x() - 10.0, prey_pos.y() - 10.0);

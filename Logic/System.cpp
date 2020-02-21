@@ -17,7 +17,6 @@ void System::addComponent(std::shared_ptr<Component> component)
 void System::updatePos(Component& component, const Eigen::Vector2d& position)
 {
     bool collide = false;
-    Eigen::Vector2d this_pos = component.getPosition();
     fetchComponent();
     for(auto other : this->components_)
     {
@@ -25,9 +24,9 @@ void System::updatePos(Component& component, const Eigen::Vector2d& position)
         {
 
             auto other_pos = other->getPosition();
-            auto diff = this_pos - other_pos;
+            auto diff = position - other_pos;
             double dist = diff.dot(diff);
-            if(dist < 100)
+            if(dist < 10)
             {
                 collide = true;
             }
@@ -90,4 +89,53 @@ void System::fetchComponent()
     }
 }
 
+std::vector<std::shared_ptr<Component>> System::getSight(Component& self)
+{
+    std::vector<std::shared_ptr<Component>> ret;
+    Eigen::Vector2d this_pos = self.getPosition();
+    auto status = self.getStatus();
+    fetchComponent();
+    for(auto other : this->components_)
+    {
+        if(&self != other.get())
+        {
+            auto other_pos = other->getPosition();
+            auto diff = this_pos - other_pos;
+            double dist = diff.norm();
+            double other_angle = std::acos(diff.y() / diff.norm()) / M_PI * 180.0;
+            auto normalized = std::remainder(other_angle, 360.0);
+            double angle_diff =  std::remainder(self.getRotation() - normalized, 360.0);
+            if(dist < status.sight_distance && std::abs(angle_diff) < status.sight_angle)
+            {
+                ret.push_back(other);
+            }
+        }
+    }
+    return ret;
+}
+
+void System::consume(Component& component)
+{
+    Eigen::Vector2d this_pos = component.getPosition();
+    fetchComponent();
+    for(auto other : this->components_)
+    {
+        if(&component != other.get())
+        {
+
+            auto other_pos = other->getPosition();
+            auto diff = this_pos - other_pos;
+            double dist = diff.dot(diff);
+            if(dist < 500 && other->getType() == FOOD)
+            {
+                auto self_status = component.getStatus();
+                self_status.energy += 1000;
+                component.setStatus(self_status);
+                Status food_status = component.getStatus();
+                food_status.energy -= 100000; 
+                other->setStatus(food_status);
+            }
+        }
+    }
+}
 };

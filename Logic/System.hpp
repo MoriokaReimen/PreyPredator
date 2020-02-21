@@ -20,6 +20,8 @@ public:
     void eachComponent(const std::function<void (const std::shared_ptr<Component> )>& func);
     void step();
     void reap();
+    void consume(Component& component);
+    std::vector<std::shared_ptr<Component>> getSight( Component& self);
 };
 
 };

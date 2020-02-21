@@ -15,11 +15,12 @@ Food::Food(System* system) :
 
 void Food::step()
 {
-    if( step_counter_ > 100 )
+    if( step_counter_ > 1000 )
     {
         auto food = std::make_shared<Logic::Food>(system_);
         food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
         system_->addComponent(food);
+        step_counter_ = 0;
 
     } else {
         step_counter_++;
