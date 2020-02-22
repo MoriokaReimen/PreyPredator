@@ -27,6 +27,12 @@ int main()
         food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
         system.addComponent(food);
     }
+    for(int i = 0; i < 5; i++)
+    {
+        auto predator = std::make_shared<Logic::Predator>(&system);
+        predator->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
+        system.addComponent(predator);
+    }
     // run the program as long as the window is open
     while (graphic.isOpen())
     {

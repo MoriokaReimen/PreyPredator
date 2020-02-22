@@ -72,7 +72,10 @@ void System::step()
     fetchComponent();
     for(auto component : components_)
     {
-        component->step();
+        if(component != nullptr)
+        {
+            component->step();
+        }
     }
     this->reap();
 }
@@ -143,7 +146,7 @@ void System::consume(Component& component)
             auto other_pos = other->getPosition();
             auto diff = this_pos - other_pos;
             double dist = diff.dot(diff);
-            if(dist < 500 && other->getType() == FOOD)
+            if(dist < 500 && other->getType() == FOOD && component.getType() == PREY)
             {
                 auto self_status = component.getStatus();
                 self_status.energy += 1000;
@@ -151,6 +154,16 @@ void System::consume(Component& component)
                 Status food_status = component.getStatus();
                 food_status.energy -= 100000; 
                 other->setStatus(food_status);
+            }
+
+            if(dist < 500 && other->getType() == PREY && component.getType() == PREDATOR)
+            {   
+                auto self_status = component.getStatus();
+                self_status.energy += 1000;
+                component.setStatus(self_status);
+                Status prey_status = component.getStatus();
+                prey_status.energy -= 100000; 
+                other->setStatus(prey_status);
             }
         }
     }

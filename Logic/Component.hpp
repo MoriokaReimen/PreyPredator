@@ -22,7 +22,8 @@ struct Status
 enum COMPONENT_TYPE
 {
     PREY,
-    FOOD
+    FOOD,
+    PREDATOR
 };
 
 class Component

@@ -74,6 +74,31 @@ void Graphic::draw_scene(std::shared_ptr<Logic::Component> component)
             window_.draw(food_body);
             break;
         }
+        case Logic::PREDATOR : {
+            auto target = component->getTarget();
+            if(target)
+            {
+                sf::CircleShape marker(12);
+                marker.setFillColor(sf::Color(255, 0, 0));
+                marker.setPosition(target->x() - 6.0, target->y() - 6.0);
+                window_.draw(marker);
+            }
+            auto prey_pos = component->getPosition();
+            auto status = component->getStatus();
+            ArcShape sight(status.sight_angle, status.sight_distance);
+            sf::CircleShape prey_body(10);
+
+            sight.setPosition(prey_pos.x(), prey_pos.y());
+            sight.setRotation(-component->getRotation() + 90.0 - status.sight_angle / 2.0);
+            sight.setFillColor(sf::Color(255, 255, 0, 100));
+
+            prey_body.setPosition(prey_pos.x() - 10.0, prey_pos.y() - 10.0);
+            prey_body.setFillColor(sf::Color(255, 0, 0));
+
+            window_.draw(sight);
+            window_.draw(prey_body);
+            break;
+        }
     }
 }
 

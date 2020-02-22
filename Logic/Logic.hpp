@@ -4,3 +4,4 @@
 #include "Component.hpp"
 #include "Prey.hpp"
 #include "Food.hpp"
+#include "Predator.hpp"
