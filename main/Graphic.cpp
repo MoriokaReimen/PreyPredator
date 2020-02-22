@@ -104,12 +104,24 @@ void Graphic::draw_scene(std::shared_ptr<Logic::Component> component)
 
 void Graphic::draw_debug(Logic::System& system)
 {
+    int prey_num = 0;
+    int predator_num = 0;
+    int food_num = 0;
+    std::function<void (const std::shared_ptr<Logic::Component> )> count_prey =
+        [&prey_num](auto component){if(component->getType() == Logic::PREY){prey_num++;}};
+    system.eachComponent(count_prey);
+    
+    std::function<void (const std::shared_ptr<Logic::Component> )> count_predator =
+        [&predator_num](auto component){if(component->getType() == Logic::PREDATOR){predator_num++;}};
+    system.eachComponent(count_predator);
+    
+    std::function<void (const std::shared_ptr<Logic::Component> )> count_food =
+        [&food_num](auto component){if(component->getType() == Logic::FOOD){food_num++;}};
+    system.eachComponent(count_food);
+
+
     sf::Text text;
-    auto component = system.getComponent(0);
-    auto position = component->getPosition();
-    auto rotation = component->getRotation();
-    std::string message = (boost::format("X:%lf\nY:%lf\n") % position.x() % position.y()).str();
-    message += (boost::format("R:%lf\n") % rotation).str();
+    std::string message = (boost::format("Prey:%d\nPredator:%d\nFood:%d\n") % prey_num % predator_num % food_num).str();
     // select the font
     text.setFont(font_); // font is a sf::Font
     // set the string to display
