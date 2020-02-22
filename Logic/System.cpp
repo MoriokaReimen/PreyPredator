@@ -1,5 +1,7 @@
 #include "System.hpp"
+#include "Utility.hpp"
 #include <algorithm>
+#include <utility>
 
 namespace Logic
 {
@@ -31,7 +33,6 @@ void System::updatePos(Component& component, const Eigen::Vector2d& position)
             double dist = diff.dot(diff);
             if(dist < 10)
             {
-                collide = true;
                 status.collide = COLLIDE::COMPONENT;
             }
         }
@@ -99,7 +100,7 @@ void System::fetchComponent()
 
 std::vector<std::shared_ptr<Component>> System::getSight(Component& self)
 {
-    std::vector<std::shared_ptr<Component>> ret;
+    std::vector<std::pair<double, std::shared_ptr<Component>>> ret;
     Eigen::Vector2d this_pos = self.getPosition();
     auto status = self.getStatus();
     fetchComponent();
@@ -108,18 +109,26 @@ std::vector<std::shared_ptr<Component>> System::getSight(Component& self)
         if(&self != other.get())
         {
             auto other_pos = other->getPosition();
-            auto diff = this_pos - other_pos;
+            Eigen::Vector2d diff = this_pos - other_pos;
             double dist = diff.norm();
-            double other_angle = std::acos(diff.y() / diff.norm()) / M_PI * 180.0;
-            auto normalized = std::remainder(other_angle, 360.0);
-            double angle_diff =  std::remainder(self.getRotation() - normalized, 360.0);
-            if(dist < status.sight_distance && std::abs(angle_diff) < status.sight_angle)
+            double angle_diff = calcAngle(this_pos, other_pos) + self.getRotation();
+            if(dist < status.sight_distance && std::abs(angle_diff) < ( status.sight_angle / 2.0))
             {
-                ret.push_back(other);
+                ret.push_back(std::make_pair(dist, other));
             }
         }
     }
-    return ret;
+
+    /* 距離が近い順に並び替える */
+    std::sort(std::begin(ret), std::end(ret),
+              [](const auto& a, const auto& b)->bool{ return a.first < b.first;});
+
+    std::vector<std::shared_ptr<Component>> in_sight;
+    std::transform(std::begin(ret), std::end(ret),
+               std::back_inserter(in_sight),
+               [](auto const& pair){ return pair.second; });
+
+    return in_sight;
 }
 
 void System::consume(Component& component)

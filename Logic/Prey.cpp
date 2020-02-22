@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <boost/random/uniform_int_distribution.hpp>
 #include <optional>
+#include "Utility.hpp"
 
 namespace Logic {
 boost::mt19937 Prey::gen_;
@@ -26,12 +27,10 @@ void Prey::step()
         this->setTarget(std::nullopt);
     } else {
         auto other_pos = in_sight[0]->getPosition();
+        double angle = calcAngle(other_pos, pos);
+        double angle_diff =  angle - rotation;
+        rotation += angle_diff > 0 ? -1 : 1;
         this->setTarget(other_pos);
-        auto diff = other_pos - pos;
-        double normalized = std::acos(diff.y() / diff.norm()) / M_PI * 180.0;
-        normalized -= 360.0 * std::floor((normalized + 180.) / 360.);
-        double angle_diff =  normalized - this->getRotation();
-        rotation += angle_diff > 0 ? -0.1 : 0.1;
     }
 
     /* 壁にぶつかったら反転する */

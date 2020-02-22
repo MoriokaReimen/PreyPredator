@@ -1,4 +1,5 @@
 #include "Component.hpp"
+#include "Utility.hpp"
 
 namespace Logic {
 Component::Component(COMPONENT_TYPE type) :
@@ -13,9 +14,7 @@ void Component::setPosition(const Eigen::Vector2d& pos)
 
 void Component::setRotation(const double& rotation)
 {
-    auto normalized = rotation;
-    normalized -= 360.0 * std::floor((normalized + 180.0) / 360.0);
-    this->rotation_ = rotation;
+    this->rotation_ = wrap_deg(rotation);
 }
 
 Eigen::Vector2d Component::getPosition()

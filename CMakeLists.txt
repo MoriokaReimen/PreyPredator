@@ -111,10 +111,10 @@ target_link_libraries(Life Logic  sfml-graphics sfml-window sfml-system)
 
 ##################################
 # Define a test
-# file(GLOB_RECURSE TEST_SRC test/*.cpp)
-# add_executable(test_all ${TEST_SRC})
-# target_link_libraries(test_all gtest_main gtest gmock engines pthread utilities items characters irrxml ${SFML_LIBRARIES} )
-# target_include_directories(test_all PUBLIC ${TEST_DIR} ${source_dir}/include)
+file(GLOB_RECURSE TEST_SRC Test/*.cpp)
+add_executable(test_all ${TEST_SRC})
+target_link_libraries(test_all gtest_main gtest gmock pthread Logic )
+target_include_directories(test_all PUBLIC ${TEST_DIR} ${source_dir}/include)
 
 ##################################
 # Just make the test runnable with

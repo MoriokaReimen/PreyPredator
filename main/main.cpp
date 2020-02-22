@@ -17,14 +17,14 @@ int main()
     boost::random::uniform_int_distribution<> dist_y(0, 500);
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode(1000, 500)), "Life");
     Logic::System system;
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 1; i++)
     {
         auto prey = std::make_shared<Logic::Prey>(&system);
         prey->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
         system.addComponent(prey);
     }
 
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < 20; i++)
     {
         auto food = std::make_shared<Logic::Food>(&system);
         food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
