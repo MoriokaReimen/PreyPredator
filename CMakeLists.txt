@@ -33,6 +33,10 @@ else()
 	message("-> Make sure the SFML libraries with the same configuration (Release/Debug, Static/Dynamic) exist.\n")
 endif()
 
+# Add boost library
+FIND_PACKAGE( Boost 1.40 COMPONENTS random REQUIRED )
+INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+
 
 ##################################
 # install GoogleTest
@@ -107,7 +111,7 @@ add_library(Logic ${LOGIC_SRC})
 # Main
 file(GLOB_RECURSE MAIN_SRC main/*.cpp)
 add_executable(Life ${MAIN_SRC})
-target_link_libraries(Life Logic  sfml-graphics sfml-window sfml-system)
+target_link_libraries(Life Logic  sfml-graphics sfml-window sfml-system ${Boost_LIBRARIES})
 
 ##################################
 # Define a test

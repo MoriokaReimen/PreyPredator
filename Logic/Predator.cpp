@@ -5,7 +5,7 @@
 #include "Utility.hpp"
 
 namespace Logic {
-boost::mt19937 Predator::gen_;
+boost::random_device Predator::gen_;
 
 Predator::Predator(System* system) :
     Component(PREDATOR), system_(system)
