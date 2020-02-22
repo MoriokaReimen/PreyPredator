@@ -3,7 +3,7 @@
 
 namespace Logic {
 Component::Component(COMPONENT_TYPE type) :
-    pos_{0.0, 0.0}, rotation_(0.0), status_{60.0, 100, 10000}, type_(type), target_(std::nullopt)
+    pos_{0.0, 0.0}, rotation_(0.0), status_{60.0, 100, 1000}, type_(type), target_(std::nullopt)
 {
 
 }

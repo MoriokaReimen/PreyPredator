@@ -21,9 +21,13 @@ void Prey::step()
     if(run_timer_ > 0)
     {
         this->run(sight);
-    } else if(!sight.empty() && sight[0]->getType() == FOOD)
+    }else if(is_matable(sight))
     {
-        this->chase(sight);
+        this->chaseMate(sight);
+    }
+    else if(!sight.empty() && sight[0]->getType() == FOOD)
+    {
+        this->chaseFood(sight);
     } else {
         this->randomWalk(sight);
     }
@@ -51,7 +55,7 @@ void Prey::randomWalk(std::vector<std::shared_ptr<Component>>& sight)
     this->status_.energy -= THRUST;
 }
 
-void Prey::chase(std::vector<std::shared_ptr<Component>>& sight)
+void Prey::chaseFood(std::vector<std::shared_ptr<Component>>& sight)
 {
     const double THRUST = 2.0;
     auto pos = this->getPosition();
@@ -101,5 +105,51 @@ void Prey::run(std::vector<std::shared_ptr<Component>>& sight)
     run_timer_ -= 1;
 }
 
+bool Prey::is_matable(std::vector<std::shared_ptr<Component>>& sight)
+{
+    bool self_condition = false;
+    bool other_condition = false;
+
+    auto self_status = this->getStatus();
+    self_condition = self_status.energy > 3000;
+    if(!sight.empty())
+    {
+        auto other_status = sight[0]->getStatus();
+        other_condition = sight[0]->getType() == PREY && other_status.energy > 3000;
+    }
+
+    return self_condition && other_condition;
+}
+void Prey::chaseMate(std::vector<std::shared_ptr<Component>>& sight)
+{
+    const double THRUST = 2.0;
+    auto pos = this->getPosition();
+    auto rotation = this->getRotation();
+    auto other_pos = sight[0]->getPosition();
+
+    double angle = calcAngle(pos, other_pos);
+    double angle_diff =  diff_deg(rotation, angle);
+    rotation += angle_diff > 0 ? 1 : -1;
+
+    this->setTarget(other_pos);
+    this->setRotation(rotation);
+    pos +=  THRUST * (Eigen::Rotation2D(-1.0 * deg_to_rad(this->getRotation())) * Eigen::Vector2d::UnitY());
+    system_->updatePos(*this, pos);
+    this->status_.energy -= THRUST;
+
+    auto dist = (pos - other_pos).norm();
+    if(dist < 100 && is_matable(sight))
+    {
+        auto other_status = sight[0]->getStatus();
+        auto self_status = this->getStatus();
+        auto child = std::make_shared<Logic::Prey>(system_);
+        child->setPosition(Eigen::Vector2d(pos.x(), pos.y()));
+        system_->addComponent(child);
+        other_status.energy = 1000;
+        self_status.energy = 1000;
+        this->setStatus(self_status);
+        sight[0]->setStatus(other_status);
+    }
+}
 
 };
