@@ -20,16 +20,14 @@ int main()
     for(int i = 0; i < 1; i++)
     {
         auto prey = std::make_shared<Logic::Prey>(&system);
-        prey->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
+        prey->setPosition(Eigen::Vector2d(100, 100));
         system.addComponent(prey);
     }
 
-    for(int i = 0; i < 20; i++)
-    {
-        auto food = std::make_shared<Logic::Food>(&system);
-        food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
-        system.addComponent(food);
-    }
+    auto food = std::make_shared<Logic::Food>(&system);
+    food->setPosition(Eigen::Vector2d(100, 180));
+    system.addComponent(food);
+
     // run the program as long as the window is open
     while (window.isOpen())
     {

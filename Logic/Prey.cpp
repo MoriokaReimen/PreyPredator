@@ -27,8 +27,8 @@ void Prey::step()
         this->setTarget(std::nullopt);
     } else {
         auto other_pos = in_sight[0]->getPosition();
-        double angle = calcAngle(other_pos, pos);
-        double angle_diff =  angle - rotation;
+        double angle = calcAngle(pos, other_pos);
+        double angle_diff =  diff_deg(rotation, angle);
         rotation += angle_diff > 0 ? -1 : 1;
         this->setTarget(other_pos);
     }
@@ -40,7 +40,7 @@ void Prey::step()
     }
 
     this->setRotation(rotation);
-    pos +=  Eigen::Rotation2D(this->getRotation() / 180.0 * M_PI) * Eigen::Vector2d::UnitY();
+    // pos +=  Eigen::Rotation2D(this->getRotation() / 180.0 * M_PI) * Eigen::Vector2d::UnitY();
     system_->updatePos(*this, pos);
     this->status_.energy -= 1;
     system_->consume(*this);

@@ -14,7 +14,7 @@ void Component::setPosition(const Eigen::Vector2d& pos)
 
 void Component::setRotation(const double& rotation)
 {
-    this->rotation_ = wrap_deg(rotation);
+    this->rotation_ = wrap_deg_180(rotation);
 }
 
 Eigen::Vector2d Component::getPosition()
