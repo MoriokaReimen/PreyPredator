@@ -15,17 +15,18 @@ int main()
     boost::random::uniform_int_distribution<> dist_y(0, 500);
     Graphic graphic;
     Logic::System system;
-    for(int i = 0; i < 1; i++)
+    for(int i = 0; i < 10; i++)
     {
         auto prey = std::make_shared<Logic::Prey>(&system);
-        prey->setPosition(Eigen::Vector2d(100, 100));
+        prey->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
         system.addComponent(prey);
     }
-
-    auto food = std::make_shared<Logic::Food>(&system);
-    food->setPosition(Eigen::Vector2d(100, 180));
-    system.addComponent(food);
-
+    for(int i = 0; i < 50; i++)
+    {
+        auto food = std::make_shared<Logic::Food>(&system);
+        food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
+        system.addComponent(food);
+    }
     // run the program as long as the window is open
     while (graphic.isOpen())
     {

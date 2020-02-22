@@ -111,7 +111,7 @@ std::vector<std::shared_ptr<Component>> System::getSight(Component& self)
             auto other_pos = other->getPosition();
             Eigen::Vector2d diff = this_pos - other_pos;
             double dist = diff.norm();
-            double angle_diff = calcAngle(this_pos, other_pos) + self.getRotation();
+            double angle_diff = diff_deg(self.getRotation(), calcAngle(this_pos, other_pos)) ;
             if(dist < status.sight_distance && std::abs(angle_diff) < ( status.sight_angle / 2.0))
             {
                 ret.push_back(std::make_pair(dist, other));

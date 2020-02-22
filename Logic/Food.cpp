@@ -19,7 +19,7 @@ void Food::step()
     {
         auto food = std::make_shared<Logic::Food>(system_);
         food->setPosition(Eigen::Vector2d(dist_x(gen), dist_y(gen)));
-        // system_->addComponent(food);
+        system_->addComponent(food);
         step_counter_ = 0;
 
     } else {

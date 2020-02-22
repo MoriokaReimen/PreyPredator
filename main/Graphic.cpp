@@ -1,13 +1,14 @@
 #include "Graphic.hpp"
 #include <exception>
+#include <boost/format.hpp>
 
 Graphic::Graphic() :
     window_(sf::VideoMode(sf::VideoMode(1000, 500)), "Life"),
     is_open_(true)
 {
-    if(!font_.loadFromFile("resource/arial.ttf"))
+    if(!font_.loadFromFile("resource/Sarai.ttf"))
     {
-        throw std::runtime_error("Failed to load resource/arial.ttf");
+        throw std::runtime_error("Failed to load font");
     }
 }
 
@@ -56,7 +57,7 @@ void Graphic::draw_scene(std::shared_ptr<Logic::Component> component)
             sf::CircleShape prey_body(10);
 
             sight.setPosition(prey_pos.x(), prey_pos.y());
-            sight.setRotation(component->getRotation() + 90.0 - status.sight_angle / 2.0);
+            sight.setRotation(-component->getRotation() + 90.0 - status.sight_angle / 2.0);
             sight.setFillColor(sf::Color(255, 255, 0, 100));
 
             prey_body.setPosition(prey_pos.x() - 10.0, prey_pos.y() - 10.0);
@@ -78,7 +79,23 @@ void Graphic::draw_scene(std::shared_ptr<Logic::Component> component)
 
 void Graphic::draw_debug(Logic::System& system)
 {
-    
+    sf::Text text;
+    auto component = system.getComponent(0);
+    auto position = component->getPosition();
+    auto rotation = component->getRotation();
+    std::string message = (boost::format("X:%lf\nY:%lf\n") % position.x() % position.y()).str();
+    message += (boost::format("R:%lf\n") % rotation).str();
+    // select the font
+    text.setFont(font_); // font is a sf::Font
+    // set the string to display
+    text.setString(message);
+    // set the character size
+    text.setCharacterSize(24); // in pixels, not points!
+    // set the color
+    text.setFillColor(sf::Color::White);
+    // inside the main loop, between window.clear() and window.display()
+    window_.draw(text);
+
 }
 
 bool Graphic::isOpen()
