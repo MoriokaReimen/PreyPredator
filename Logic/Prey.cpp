@@ -21,8 +21,7 @@ void Prey::step()
     if(run_timer_ > 0)
     {
         this->run(sight);
-    }
-    if(!sight.empty() && sight[0]->getType() == FOOD)
+    } else if(!sight.empty() && sight[0]->getType() == FOOD)
     {
         this->chase(sight);
     } else {
