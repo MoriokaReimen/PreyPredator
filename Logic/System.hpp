@@ -23,6 +23,7 @@ public:
     void reap();
     void consume(Component& component);
     std::vector<std::shared_ptr<Component>> getSight( Component& self);
+    std::shared_ptr<Component> getComponent(const int& idx);
 };
 
 };

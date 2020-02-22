@@ -155,4 +155,10 @@ void System::consume(Component& component)
         }
     }
 }
+
+std::shared_ptr<Component> System::getComponent(const int& idx)
+{
+    return this->components_[idx];
+}
+
 };
